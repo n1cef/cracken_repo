@@ -1,0 +1,63 @@
+
+pkgname=nano
+pkgver=8.1
+
+dependencies=(
+	"!$pkgname"
+	
+)
+sources=(
+	"https://www.nano-editor.org/dist/v8/nano-8.1.tar.xz"
+)
+
+sha1sums=(
+	'9eb581845590ad70ba89c04509c7a386'
+)
+
+
+cracken_prepare() {
+	tar -xf "${sources_dir}/${pkgname}-${pkgver}.tar.gz" -C "$build_dir"
+
+	cd "${build_dir}/${pkgname}-${pkgver}"
+
+	./configure --prefix=/usr     \
+            --sysconfdir=/etc \
+            --enable-utf8     \
+            --docdir=/usr/share/doc/nano-8.1
+}
+
+cracken_build() {
+	cd "${build_dir}/${pkgname}-${pkgver}"
+	make
+}
+
+cracken_check() {
+	#cd "${build_dir}/${pkgname}-${pkgver}"
+	#make check
+    return
+}
+
+cracken_install() {
+	cd "${build_dir}/${pkgname}-${pkgver}"
+	#make DESTDIR="$fakeroot_dir" install
+    make install
+}
+
+cracken_preinstall() {
+	return
+}
+
+cracken_postinstall() {
+    install -v -m644 doc/{nano.html,sample.nanorc} /usr/share/doc/nano-8.1
+	
+}
+
+cracken_preremove() {
+	return
+}
+
+cracken_postremove() {
+	return
+}
+
+# vim:set ts=4 syntax=sh:
